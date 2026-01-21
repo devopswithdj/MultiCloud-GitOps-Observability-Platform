@@ -9,3 +9,10 @@ az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<SUBSCRIP
 > $env:ARM_CLIENT_SECRET = "12345678-0000-0000-0000-000000000000"
 > $env:ARM_TENANT_ID = "10000000-0000-0000-0000-000000000000"
 > $env:ARM_SUBSCRIPTION_ID = "20000000-0000-0000-0000-000000000000"
+
+
+
+az group create --name terraform-rg --location centralus
+
+az storage account create --name tfinfrastgacct --resource-group terraform-rg --location centralus --sku Standard_LRS --kind StorageV2 --min-tls-version TLS1_2 --allow-blob-public-access false
+
