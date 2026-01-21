@@ -1,8 +1,27 @@
 terraform {
   backend "azurerm" {
-    access_key           = "abcdefghijklmnopqrstuvwxyz0123456789..."  # Can also be set via `ARM_ACCESS_KEY` environment variable.
-    storage_account_name = "abcd1234"                                 # Can be passed via `-backend-config=`"storage_account_name=<storage account name>"` in the `init` command.
-    container_name       = "tfstate"                                  # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
-    key                  = "prod.terraform.tfstate"                   # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
+    use_oidc             = true
+    use_azuread_auth     = true
+    tenant_id            = "7facfc55-87e0-4390-a951-abdbb862b7fb"
+    client_id            = "94b8521d-41e9-4cc1-a313-ad7e85410d90"
+    storage_account_name = "tfinfrastgacct"
+    container_name       = "tfteststatefiles"
+    key                  = "test.terraform.tfstate"
   }
 }
+
+
+
+
+# terraform {
+#   backend "azurerm" {
+#     resource_group_name = "StorageRG"
+#     access_key           = "StorageString"
+#     storage_account_name = "StorageName"
+#     container_name       = "StorageContainer"
+#     key                  = "projectname-env-modules.tfstate"
+#   }
+# }
+
+# Above values get fetched from Replace.ps1 script during deployment
+# /Replace.ps1 -StorageAccountName "StorageName" -StorageContainerName "StorageContainer" -StorageAccessKey "StorageString" -ResourceGroupName "StorageRG" -ProjectName "projectname" -Environment "env"
