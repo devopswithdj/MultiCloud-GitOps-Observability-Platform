@@ -30,14 +30,14 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name                   = "tfpool"
     node_count             = 1
-    vm_size                = "Standard_DS2_v2"
+    vm_size                = "Standard_DC4s_v3"
     node_public_ip_enabled = false
     os_disk_size_gb        = 128
     os_sku                 = "Ubuntu"
     type                   = "VirtualMachineScaleSets"
     vnet_subnet_id         = azurerm_subnet.snet.id
-    zones                  = ["1", "2", "3"]
-    max_pods               = "250"
+    zones                  = [1,2,3]
+    max_pods               = 250
   }
 
   network_profile {
