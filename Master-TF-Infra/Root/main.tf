@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_virtual_network" "vnet" {
   depends_on = [ azurerm_resource_group.rg ]
   name                = "tf-vnet"
-  address_space       = ["10.0.0.0/16"]
+  address_space       = ["192.168.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -18,7 +18,7 @@ resource "azurerm_subnet" "snet" {
   name                 = "tf-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.0.0/24"]
+  address_prefixes     = ["192.168.0.0/24"]
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   dns_prefix          = "tfaksdns"
-  sku_tier            = "Standard"
+  sku_tier            = "Free"
   kubernetes_version  = "1.33.5"
   node_resource_group = "tf-aks-node-rg"
 
@@ -47,9 +47,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   network_profile {
     network_plugin      = "azure"
     network_policy      = "calico"
+    network_plugin_mode = "overlay"
     outbound_type       = "loadBalancer"
     load_balancer_sku   = "standard"
-    service_cidr = azurerm_subnet.snet.address_prefixes[0]
+    service_cidr = "10.0.0.0/16"
+    dns_service_ip = "10.0.0.10"
   }
 
   azure_policy_enabled = true
