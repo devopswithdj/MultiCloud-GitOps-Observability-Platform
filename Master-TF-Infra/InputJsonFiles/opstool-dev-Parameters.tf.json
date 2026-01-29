@@ -1,0 +1,68 @@
+{
+    "variable": {
+        "ProjectName": {
+            "type": "string",
+            "default": "opstool"
+        },
+        "Environment": {
+            "type": "string",
+            "default": "dev"
+        },
+        "Location": {
+            "type": "string",
+            "default": "Central US"
+        },
+        "Loc": {
+            "type": "string",
+            "default": "cus"
+        },
+        "default_tags": {
+            "type": "map",
+            "default": {
+                "Owner": "devopswithdj",
+                "Project": "MultiCloud-GitOps-Observability-Platform",
+                "Environment": "dev"
+            }
+        },
+        "vnet_address_space":{
+            "type": "list",
+            "default": ["192.168.0.0/16"]
+        },
+        "snet_address_space":{
+            "type": "list",
+            "default": ["192.168.1.0/24"]
+        },
+        "aks_pricing_tier": {
+            "type": "string",
+            "default": "Free"
+        },
+        "aks_kubernetes_version": {
+            "type": "string",
+            "default": "1.33.5"
+        },
+        "aks_node_count": {
+            "type": "number",
+            "default": 1
+        },
+        "aks_nodepool_sku": {
+            "type": "string",
+            "default": "Standard_D4as_v5"
+        },
+        "availability_zones": {
+            "type": "list",
+            "default": ["1", "2", "3"]
+        },
+        "max_pods_per_node": {
+            "type": "number",
+            "default": 250
+        },
+        "aks_service_cidr": {
+            "type": "string",
+            "default": "10.0.0.0/16"
+        },
+        "aks_dns_service_ip": {
+            "type": "string",
+            "default": "10.0.0.10"
+        }
+    }
+}
