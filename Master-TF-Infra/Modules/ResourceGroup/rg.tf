@@ -1,4 +1,5 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "terraform-rg-01"
-  location = "Central US"
+  name     = var.rgname
+  location = var.location
+  tags = var.default_tags
 }

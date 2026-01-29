@@ -1,16 +1,17 @@
+data azurerm_resource_group rg {
+  name = var.rgname
+}
 resource "azurerm_virtual_network" "vnet" {
-  depends_on = [ azurerm_resource_group.rg ]
-  name                = "tf-vnet"
-  address_space       = ["192.168.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
+  name                = var.vnetname
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  address_space       = var.vnetaddress #["192.168.0.0/16"]
+  tags = var.default_tags
 }
 
 resource "azurerm_subnet" "snet" {
-  depends_on = [ azurerm_virtual_network.vnet ]
-  name                 = "tf-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
+  name                 = var.snetname
+  resource_group_name  = data.azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["192.168.0.0/24"]
+  address_prefixes     = var.snetaddress #["192.168.0.0/24"]
 }
