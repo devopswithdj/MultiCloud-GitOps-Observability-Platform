@@ -13,20 +13,29 @@ pool:
 # - group: terraform-kvlt-grp
 
 steps:
-- task: AzureKeyVault@2
+# - task: AzureKeyVault@2
+#   inputs:
+#     azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
+#     KeyVaultName: 'terrafrom-kvlt'
+#     SecretsFilter: '*'
+#     RunAsPreJob: true
+
+# - script: echo Hello, world!
+#   displayName: 'Run a one-line script'
+
+# - script: |
+#     echo Add other tasks to build, test, and deploy your project.
+#     echo See https://aka.ms/yaml
+#   displayName: 'Run a multi-line script'
+- task: PowerShell@2
   inputs:
-    azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
-    KeyVaultName: 'terrafrom-kvlt'
-    SecretsFilter: '*'
-    RunAsPreJob: true
-
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
+      
+      Write-Host "Hello World"
+      
+      ls "D:\a\1\s"
 
 
 - script: echo "My secret value is $(azure-client-id)"
