@@ -1,9 +1,6 @@
 trigger: none
 pool:
   vmImage: windows-2022
-variables:
-  - name: environment
-    value: $(environment)
 
 stages:
 - stage: 'InfraSetup'
@@ -16,3 +13,7 @@ stages:
         KeyVaultName: 'terrafrom-kvlt'
         SecretsFilter: '*'
         RunAsPreJob: true
+    - task: PowerShell@2
+      inputs:
+        filePath: 'Master-TF-Infra/Scripts/Replace.ps1'
+        arguments: '-environment $(environment) -projectName $(projectName) -storageRG $(storageRG) -storageAccount $(storageAccount) -storageContainer $(storageContainer) -storageKey $(storageKey)'
