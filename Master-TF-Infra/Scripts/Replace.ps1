@@ -1,4 +1,4 @@
-Param {
+Param (
     [String]
     $environment = "string",
     [String]
@@ -12,7 +12,7 @@ Param {
     [String]
     $storageKey = "string"
 
-}
+)
 
 # Replace values in the backend.tf file
 cd D:\a\1\s\Master-TF-Infra\Root
