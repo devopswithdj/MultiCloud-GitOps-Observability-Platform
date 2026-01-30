@@ -18,13 +18,13 @@ stages:
       inputs:
         filePath: 'Master-TF-Infra/Scripts/Replace.ps1'
         arguments: '-environment "$(environment)" -projectName "$(projectName)" -storageRG "$(storageRG)" -storageAccount "$(storageAccount)" -storageContainer "$(storageContainer)" -storageKey "$(storageKey)"'
-    - task: PowerShell@2
-      name: 'Print_and_check'
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Write your PowerShell commands here.
-          Get-Content -Path "Master-TF-Infra/Root/backend.tf"
+    # - task: PowerShell@2
+    #   name: 'Print_and_check'
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       # Write your PowerShell commands here.
+    #       Get-Content -Path "Master-TF-Infra/Root/backend.tf"
 
     - task: PowerShell@2
       name: 'Cleaning_Repo'
@@ -34,4 +34,4 @@ stages:
           # Write your PowerShell commands here.
           
           Write-Host "Cleaning Repo"
-          Remove-Item $(Build.SourceDirectory)\* -Recurse -Force
+          Remove-Item .\* -Recurse -Force
