@@ -33,4 +33,4 @@ Write-Host "Replaced values in backend.tf file successfully."
 
 Copy-Item -Path "D:\a\1\s\Master-TF-Infra\InputJsonFiles\$projectName-$environment.json" -Destination "D:\a\1\s\Master-TF-Infra\Root\" -Force
 
-Write-Host "Copied $projectName-$environment.json to Root directory successfully."
+Write-Host "Copied $projectName-$environment-Parameters.tf.json to Root directory successfully."
