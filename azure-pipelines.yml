@@ -17,7 +17,7 @@ stages:
       name: 'Backend_Setup'
       inputs:
         filePath: 'Master-TF-Infra/Scripts/Replace.ps1'
-        arguments: '-environment $(environment) -projectName $(projectName) -storageRG $(storageRG) -storageAccount $(storageAccount) -storageContainer $(storageContainer) -storageKey $(storageKey)'
+        arguments: '-environment "$(environment)" -projectName "$(projectName)" -storageRG "$(storageRG)" -storageAccount "$(storageAccount)" -storageContainer "$(storageContainer)" -storageKey "$(storageKey)"'
     - task: PowerShell@2
       name: 'Print_and_check'
       inputs:
