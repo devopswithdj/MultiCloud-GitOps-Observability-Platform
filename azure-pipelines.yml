@@ -7,7 +7,7 @@
 trigger: none
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-2022
 
 # variables:
 # - group: terraform-kvlt-grp
@@ -35,7 +35,7 @@ steps:
       
       Write-Host "Hello World"
       
-      ls "D:\a\1\s"
+      pwd
 
 
 - script: echo "My secret value is $(azure-client-id)"
