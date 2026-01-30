@@ -1,4 +1,5 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -12,6 +13,13 @@ variables:
 - group: terraform-kvlt-grp
 
 steps:
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
+    KeyVaultName: 'terrafrom-kvlt'
+    SecretsFilter: '*'
+    RunAsPreJob: true
+
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
