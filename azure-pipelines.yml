@@ -1,41 +1,19 @@
-# Starter pipeline
-
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger: none
-
 pool:
   vmImage: windows-2022
-
-# variables:
-# - group: terraform-kvlt-grp
-
-steps:
-- task: AzureKeyVault@2
-  inputs:
-    azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
-    KeyVaultName: 'terrafrom-kvlt'
-    SecretsFilter: '*'
-    RunAsPreJob: true
-
-# - script: echo Hello, world!
-#   displayName: 'Run a one-line script'
-
-# - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your PowerShell commands here.
-      
-      Write-Host "Hello World"
-      
-      pwd
-
-
-- script: echo "My secret value is $(azure-client-id)"
+variables:
+  environment: 'dev'
+  projectName: 'opstool'
+  storageRG: 'terraform-rg'
+  storageContainer: 'tfteststatefiles'
+stages:
+- stage: 'InfraSetup'
+  jobs:
+  - job: 'TF_Infra_Build'
+    steps:
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
+        KeyVaultName: 'terrafrom-kvlt'
+        SecretsFilter: '*'
+        RunAsPreJob: true
