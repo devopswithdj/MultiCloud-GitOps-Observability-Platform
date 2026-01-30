@@ -9,8 +9,8 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
-variables:
-- group: terraform-kvlt-grp
+# variables:
+# - group: terraform-kvlt-grp
 
 steps:
 - task: AzureKeyVault@2
