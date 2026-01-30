@@ -15,7 +15,7 @@ Param {
 }
 
 # Replace values in the backend.tf file
-cd D:\devopswithdj\MultiCloud-GitOps-Observability-Platform\Master-TF-Infra\Root
+cd D:\a\1\s\Master-TF-Infra\Root
 
 # Setting up backend configuration
 $filePath = ".\backend.tf"
@@ -30,3 +30,7 @@ $filePath = ".\backend.tf"
 } | Set-Content $filePath
 
 Write-Host "Replaced values in backend.tf file successfully."
+
+Copy-Item -Path "D:\a\1\s\Master-TF-Infra\InputJsonFiles\$projectName-$environment.json" -Destination "D:\a\1\s\Master-TF-Infra\Root\" -Force
+
+Write-Host "Copied $projectName-$environment.json to Root directory successfully."
