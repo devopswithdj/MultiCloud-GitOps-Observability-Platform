@@ -2,10 +2,9 @@ trigger: none
 pool:
   vmImage: windows-2022
 variables:
-  environment: 'dev'
-  projectName: 'opstool'
-  storageRG: 'terraform-rg'
-  storageContainer: 'tfteststatefiles'
+  - name: environment
+    value: $(environment)
+
 stages:
 - stage: 'InfraSetup'
   jobs:
