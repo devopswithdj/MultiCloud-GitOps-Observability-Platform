@@ -135,7 +135,7 @@ stages:
         buildType: 'current'
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
-        cleanDestinationFolder: true
+
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
