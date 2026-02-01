@@ -1,11 +1,13 @@
 trigger: none
+
 pool:
   vmImage: windows-2022
 
 stages:
 - stage: 'InfraSetup'
   jobs:
-  - job: 'TF_Infra_Build'
+  - job: Job_1
+    displayName: 'TF_Infra_Build'
     steps:
     - task: AzureKeyVault@2
       inputs:
@@ -20,26 +22,82 @@ stages:
         arguments: '-environment "$(environment)" -projectName "$(projectName)" -storageRG "$(storageRG)" -storageAccount "$(storageAccount)" -storageContainer "$(storageContainer)" -storageKey "$(storageKey)"'
     # - task: PowerShell@2
     #   name: 'Print_and_check'
+
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+
     - task: PowerShell@2
       name: Initialize_Terraform
       inputs:
         targetType: 'inline'
         script: |
           # Write your PowerShell commands here.
+          cd "Master-TF-Infra/Root/"
           Write-Host "<<<<<<<<<<<<<<<Terrform Init Section>>>>>>>>>>>>>>>"
-          terraform init
+          terraform init -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -upgrade
+
+    - task: PowerShell@2
+      name: Planning_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "Master-TF-Infra/Root/"
+          Write-Host "<<<<<<<<<<<<<<<Terrform Plan Section>>>>>>>>>>>>>>>"
+          terraform plan -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)"
+
+    - task: PublishPipelineArtifact@1
+      name: Publish_TF_Artifact
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)'
+        artifact: 'TerraformPackage'
+        publishLocation: 'pipeline'
     #   inputs:
     #     targetType: 'inline'
     #     script: |
     #       # Write your PowerShell commands here.
     #       Get-Content -Path "Master-TF-Infra/Root/backend.tf"
 
-    - task: PowerShell@2
-      name: 'Cleaning_Repo'
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Write your PowerShell commands here.
+  # - job: Job_2
+  #   displayName: 'TF_Infra_Validation_Approval'
+  #   dependsOn: Job_1
+  #   pool:
+  #     name: server
+  #   steps:
+  #   - task: ManualValidation@1
+  #     inputs:
+  #       notifyUsers: 'devopswithdj@gmail.com'
+  #       approvers: 'devopswithdj@gmail.com'
+  #       instructions: 'Please Review Terraform plan and Approve/Reject the task.'
+
+  # - job: Job_3
+  #   displayName: 'TF_Apply_Section'
+  #   dependsOn: Job_2
+  #   pool:
+  #     name: server
+  #   steps:
+  #   - task: TerraformInstaller@1
+  #     inputs:
+  #       terraformVersion: 'latest'
+
+  #   - task: PowerShell@2
+  #     name: Applying_Terraform
+  #     inputs:
+  #       targetType: 'inline'
+  #       script: |
+  #         # Write your PowerShell commands here.
+  #         cd "Master-TF-Infra/Root/"
+  #         Write-Host "<<<<<<<<<<<<<<<Terrform Apply Section>>>>>>>>>>>>>>>"
+  #         terraform apply -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)"
+    
+
+    # - task: PowerShell@2
+    #   name: 'Cleaning_Repo'
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       # Write your PowerShell commands here.
           
-          Write-Host "Cleaning Repo"
-          Remove-Item .\* -Recurse -Force
+    #       Write-Host "Cleaning Repo"
+    #       Remove-Item .\* -Recurse -Force
