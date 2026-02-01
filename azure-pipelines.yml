@@ -20,6 +20,14 @@ stages:
         arguments: '-environment "$(environment)" -projectName "$(projectName)" -storageRG "$(storageRG)" -storageAccount "$(storageAccount)" -storageContainer "$(storageContainer)" -storageKey "$(storageKey)"'
     # - task: PowerShell@2
     #   name: 'Print_and_check'
+    - task: PowerShell@2
+      name: Initialize_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          Write-Host "<<<<<<<<<<<<<<<Terrform Init Section>>>>>>>>>>>>>>>"
+          terraform init
     #   inputs:
     #     targetType: 'inline'
     #     script: |
