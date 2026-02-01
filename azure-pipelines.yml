@@ -147,6 +147,24 @@ stages:
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
 
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Replace values in the backend.tf file
+          cd "$(System.ArtifactsDirectory)/TerraformFinalPackage/Master-TF-Infra/Root"
+          
+          # Setting up backend configuration
+          $filePath = ".\backend.tf"
+          
+          (Get-Content $filePath) | ForEach-Object {
+              $_ -replace 'env', $(environment) `
+                -replace 'projectname', $(projectName) `
+                -replace 'StorageRG', $(storageRG) `
+                -replace 'StorageName', $(storageAccount) `
+                -replace 'StorageContainer', $(storageContainer) `
+                -replace 'StorageString', $(storageKey)
+          } | Set-Content $filePath
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
