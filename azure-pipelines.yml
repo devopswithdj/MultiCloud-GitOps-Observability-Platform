@@ -75,6 +75,13 @@ stages:
     displayName: 'TF_Deploy_Section'
     dependsOn: Job_2
     steps:
+
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
+        KeyVaultName: 'terrafrom-kvlt'
+        SecretsFilter: '*'
+        RunAsPreJob: true
     - task: DownloadBuildArtifacts@1
       inputs:
         buildType: 'current'
@@ -117,6 +124,12 @@ stages:
     displayName: 'TF_Destroy_Section'
     dependsOn: Job_4
     steps:
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'DevOps-Learning (f48e8bb1-b672-439f-969d-4d0ef85f4012)'
+        KeyVaultName: 'terrafrom-kvlt'
+        SecretsFilter: '*'
+        RunAsPreJob: true
     - task: DownloadBuildArtifacts@1
       inputs:
         buildType: 'current'
