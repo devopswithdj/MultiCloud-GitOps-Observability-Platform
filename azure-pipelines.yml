@@ -158,12 +158,12 @@ stages:
           $filePath = ".\backend.tf"
           
           (Get-Content $filePath) | ForEach-Object {
-              $_ -replace 'env', $(environment) `
-                -replace 'projectname', $(projectName) `
-                -replace 'StorageRG', $(storageRG) `
-                -replace 'StorageName', $(storageAccount) `
-                -replace 'StorageContainer', $(storageContainer) `
-                -replace 'StorageString', $(storageKey)
+              $_ -replace 'env', '$(environment)' `
+                -replace 'projectname', '$(projectName)' `
+                -replace 'StorageRG', '$(storageRG)' `
+                -replace 'StorageName', '$(storageAccount)' `
+                -replace 'StorageContainer', '$(storageContainer)' `
+                -replace 'StorageString', '$(storageKe'y)
           } | Set-Content $filePath
     - task: TerraformInstaller@1
       inputs:
