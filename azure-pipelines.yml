@@ -59,38 +59,84 @@ stages:
     #       # Write your PowerShell commands here.
     #       Get-Content -Path "Master-TF-Infra/Root/backend.tf"
 
-  # - job: Job_2
-  #   displayName: 'TF_Infra_Validation_Approval'
-  #   dependsOn: Job_1
-  #   pool:
-  #     name: server
-  #   steps:
-  #   - task: ManualValidation@1
-  #     inputs:
-  #       notifyUsers: 'devopswithdj@gmail.com'
-  #       approvers: 'devopswithdj@gmail.com'
-  #       instructions: 'Please Review Terraform plan and Approve/Reject the task.'
+  - job: Job_2
+    displayName: 'TF_Infra_Validation_Approval'
+    dependsOn: Job_1
+    pool:
+      name: server
+    steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'devopswithdj@gmail.com'
+        approvers: 'devopswithdj@gmail.com'
+        instructions: 'Please Review Terraform plan and Approve/Reject the task.'
 
-  # - job: Job_3
-  #   displayName: 'TF_Apply_Section'
-  #   dependsOn: Job_2
-  #   pool:
-  #     name: server
-  #   steps:
-  #   - task: TerraformInstaller@1
-  #     inputs:
-  #       terraformVersion: 'latest'
+  - job: Job_3
+    displayName: 'TF_Deploy_Section'
+    dependsOn: Job_2
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
 
-  #   - task: PowerShell@2
-  #     name: Applying_Terraform
-  #     inputs:
-  #       targetType: 'inline'
-  #       script: |
-  #         # Write your PowerShell commands here.
-  #         cd "Master-TF-Infra/Root/"
-  #         Write-Host "<<<<<<<<<<<<<<<Terrform Apply Section>>>>>>>>>>>>>>>"
-  #         terraform apply -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)"
-    
+    - task: PowerShell@2
+      name: Applying_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "$(System.ArtifactsDirectory)/TerraformPackage/Master-TF-Infra/Root/"
+          Write-Host "<<<<<<<<<<<<<<<Terrform Apply Section>>>>>>>>>>>>>>>"
+          terraform apply -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -auto-approve
+
+    - task: PublishPipelineArtifact@1
+      name: Publish_TF_Artifact
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)'
+        artifact: 'TerraformFinalPackage'
+        publishLocation: 'pipeline'
+
+  - job: Job_4
+    displayName: 'TF_Delete_Validation_Approval'
+    dependsOn: Job_3
+    pool:
+      name: server
+    steps:
+    - task: ManualValidation@1
+      inputs:
+        notifyUsers: 'devopswithdj@gmail.com'
+        approvers: 'devopswithdj@gmail.com'
+        instructions: 'Please Review Azure Dashboard and approve or Reject the task.'
+
+  - job: Job_5
+    displayName: 'TF_Destroy_Section'
+    dependsOn: Job_4
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: PowerShell@2
+      name: Applying_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "$(System.ArtifactsDirectory)/TerraformFinalPackage/Master-TF-Infra/Root/"
+          Write-Host "<<<<<<<<<<<<<<<Terrform Apply Section>>>>>>>>>>>>>>>"
+          terraform destroy -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -auto-approve
+
 
     # - task: PowerShell@2
     #   name: 'Cleaning_Repo'
