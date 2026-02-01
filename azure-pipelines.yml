@@ -92,6 +92,17 @@ stages:
         terraformVersion: 'latest'
 
     - task: PowerShell@2
+      name: Initialize_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "Master-TF-Infra/TerraformPackage/Root/"
+          Write-Host "<<<<<<<<<<<<<<<Terrform Init Section>>>>>>>>>>>>>>>"
+          terraform init -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -upgrade
+
+
+    - task: PowerShell@2
       name: Applying_Terraform
       inputs:
         targetType: 'inline'
@@ -139,6 +150,16 @@ stages:
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
+
+    - task: PowerShell@2
+      name: Initialize_Terraform
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "Master-TF-Infra/TerraformFinalPackage/Root/"
+          Write-Host "<<<<<<<<<<<<<<<Terrform Init Section>>>>>>>>>>>>>>>"
+          terraform init -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -upgrade
 
     - task: PowerShell@2
       name: Applying_Terraform
