@@ -221,7 +221,7 @@ stages:
           terraform init -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -upgrade
 
     - task: PowerShell@2
-      name: Applying_Terraform
+      name: Destroy_Terraform
       inputs:
         targetType: 'inline'
         script: |
