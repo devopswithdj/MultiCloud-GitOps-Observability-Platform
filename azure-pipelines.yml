@@ -59,6 +59,16 @@ stages:
     #       # Write your PowerShell commands here.
     #       Get-Content -Path "Master-TF-Infra/Root/backend.tf"
 
+    - task: PowerShell@2
+      name: 'Cleaning_Repo'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          
+          Write-Host "Cleaning Repo"
+          Remove-Item $(System.DefaultWorkingDirectory)\* -Recurse -Force
+
   - job: Job_2
     displayName: 'TF_Infra_Validation_Approval'
     dependsOn: Job_1
@@ -130,6 +140,16 @@ stages:
         artifact: 'TerraformFinalPackage'
         publishLocation: 'pipeline'
 
+    - task: PowerShell@2
+      name: 'Cleaning_Repo'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          
+          Write-Host "Cleaning Repo"
+          Remove-Item $(System.DefaultWorkingDirectory)\* -Recurse -Force
+
   - job: Job_4
     displayName: 'TF_Delete_Validation_Approval'
     dependsOn: Job_3
@@ -168,24 +188,24 @@ stages:
           Write-Host "<<<<<<<<<<<<<<<listing Files here>>>>>>>>>>>>>>>"
           Get-ChildItem -Recurse
 
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: |
-          # Replace values in the backend.tf file
-          cd "$(System.ArtifactsDirectory)/TerraformFinalPackage/Master-TF-Infra/Root"
+    # - task: PowerShell@2
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       # Replace values in the backend.tf file
+    #       cd "$(System.ArtifactsDirectory)/TerraformFinalPackage/Master-TF-Infra/Root"
           
-          # Setting up backend configuration
-          $filePath = ".\backend.tf"
+    #       # Setting up backend configuration
+    #       $filePath = ".\backend.tf"
           
-          (Get-Content $filePath) | ForEach-Object {
-              $_ -replace 'env', '$(environment)' `
-                -replace 'projectname', '$(projectName)' `
-                -replace 'StorageRG', '$(storageRG)' `
-                -replace 'StorageName', '$(storageAccount)' `
-                -replace 'StorageContainer', '$(storageContainer)' `
-                -replace 'StorageString', '$(storageKey)'
-          } | Set-Content $filePath
+    #       (Get-Content $filePath) | ForEach-Object {
+    #           $_ -replace 'env', '$(environment)' `
+    #             -replace 'projectname', '$(projectName)' `
+    #             -replace 'StorageRG', '$(storageRG)' `
+    #             -replace 'StorageName', '$(storageAccount)' `
+    #             -replace 'StorageContainer', '$(storageContainer)' `
+    #             -replace 'StorageString', '$(storageKey)'
+    #       } | Set-Content $filePath
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -211,12 +231,12 @@ stages:
           terraform destroy -var "azure_client_id=$(azure-client-id)" -var "azure_client_secret=$(azure-client-secret)" -var "azure_tenant_id=$(azure-tenant-id)" -var "azure_subscription_id=$(azure-subscription-id)" -auto-approve
 
 
-    # - task: PowerShell@2
-    #   name: 'Cleaning_Repo'
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       # Write your PowerShell commands here.
+    - task: PowerShell@2
+      name: 'Cleaning_Repo'
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
           
-    #       Write-Host "Cleaning Repo"
-    #       Remove-Item .\* -Recurse -Force
+          Write-Host "Cleaning Repo"
+          Remove-Item $(System.DefaultWorkingDirectory)\* -Recurse -Force
