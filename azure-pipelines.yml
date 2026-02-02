@@ -87,6 +87,17 @@ stages:
         buildType: 'current'
         downloadType: 'specific'
         downloadPath: '$(System.ArtifactsDirectory)'
+
+    - task: PowerShell@2
+      name: Check_content
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "$(System.ArtifactsDirectory)/TerraformPackage/Master-TF-Infra/Root/"
+          Write-Host "<<<<<<<<<<<<<<<listing Files here>>>>>>>>>>>>>>>"
+          Get-ChildItem -Recurse
+
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
@@ -115,7 +126,7 @@ stages:
     - task: PublishPipelineArtifact@1
       name: Publish_TF_Artifact
       inputs:
-        targetPath: '$(System.DefaultWorkingDirectory)'
+        targetPath: '$(System.ArtifactsDirectory)/TerraformPackage'
         artifact: 'TerraformFinalPackage'
         publishLocation: 'pipeline'
 
@@ -148,6 +159,16 @@ stages:
         downloadPath: '$(System.ArtifactsDirectory)'
 
     - task: PowerShell@2
+      name: Check_content
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          cd "$(System.ArtifactsDirectory)/TerraformFinalPackage/Master-TF-Infra/Root/"
+          Write-Host "<<<<<<<<<<<<<<<listing Files here>>>>>>>>>>>>>>>"
+          Get-ChildItem -Recurse
+
+    - task: PowerShell@2
       inputs:
         targetType: 'inline'
         script: |
@@ -163,7 +184,7 @@ stages:
                 -replace 'StorageRG', '$(storageRG)' `
                 -replace 'StorageName', '$(storageAccount)' `
                 -replace 'StorageContainer', '$(storageContainer)' `
-                -replace 'StorageString', '$(storageKe'y)
+                -replace 'StorageString', '$(storageKey)'
           } | Set-Content $filePath
     - task: TerraformInstaller@1
       inputs:
