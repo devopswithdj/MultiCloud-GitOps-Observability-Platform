@@ -40,9 +40,9 @@ module "AKS" {
   default_tags          = var.default_tags
 }
 
-# Output the AKS cluster kubeconfig
-output "kubeconfig" {
-  description = "Kubeconfig for the AKS cluster"
-  value       = module.AKS.kube_config_raw
-  sensitive   = true
+# Output the AKS cluster info
+output "aks_info" {
+  description = "Name of the AKS cluster"
+  value       = module.AKS.cluster_name
+  sensitive   = false
 }
