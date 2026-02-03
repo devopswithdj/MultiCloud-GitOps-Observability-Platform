@@ -14,7 +14,7 @@ module "Network" {
   vnetname    = "${var.ProjectName}-${var.Loc}-${var.Environment}-vnet"
   snetname    = "${var.ProjectName}-${var.Loc}-${var.Environment}-snet"
   vnetaddress = var.vnet_address_space
-  snetaddress = var.subnet_address_space
+  snetaddress = var.snet_address_space
   default_tags = var.default_tags
 }
 
