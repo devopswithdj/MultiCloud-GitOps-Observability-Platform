@@ -43,6 +43,6 @@ module "AKS" {
 # Output the AKS cluster kubeconfig
 output "kubeconfig" {
   description = "Kubeconfig for the AKS cluster"
-  value       = module.AKS.kubeconfig
+  value       = module.AKS.kube_config_raw
   sensitive   = true
 }
