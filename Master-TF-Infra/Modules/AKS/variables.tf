@@ -77,3 +77,8 @@ variable default_tags {
   description = "A map of default tags to apply to resources"
   type        = map(string)
 }
+
+variable tenant_id {
+  description = "The Azure AD Tenant ID for AKS integration"
+  type        = string
+}

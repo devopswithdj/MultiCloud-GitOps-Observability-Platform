@@ -36,6 +36,7 @@ module "AKS" {
   max_pods_per_node     = var.max_pods_per_node
   aks_service_cidr      = var.aks_service_cidr
   aks_dns_service_ip    = var.aks_dns_service_ip
+  tenant_id = var.azure_tenant_id
   default_tags          = var.default_tags
 }
 
