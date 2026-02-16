@@ -64,15 +64,11 @@
             "type": "string",
             "default": "10.0.0.10"
         },
-        "acrname": {
-            "type": "string",
-            "default": "opstoolacr"
-        },
-        "acrsku": {
+        "acr_sku": {
             "type": "string",
             "default": "Basic"
         },
-        "adminenabled": {
+        "acr_admin_enabled": {
             "type": "bool",
             "default": true
         }

@@ -18,6 +18,16 @@ module "Network" {
   default_tags = var.default_tags
 }
 
+module "ACR" {
+  source      = "..//Modules/ACR"
+  depends_on = [ module.ResourceGroup ]
+  rgname                 = "${var.ProjectName}-${var.Loc}-${var.Environment}-rg"
+  acrname                = "${var.ProjectName}${var.Loc}${var.Environment}acr"  # ACR name must be globally unique
+  acrsku                 = var.acr_sku
+  adminenabled           = var.acr_admin_enabled
+  default_tags           = var.default_tags
+}
+
 module "AKS" {
   source      = "..//Modules/AKS"
   depends_on = [ module.Network ]
@@ -39,6 +49,7 @@ module "AKS" {
   tenant_id = var.azure_tenant_id
   default_tags          = var.default_tags
 }
+
 
 # Output the AKS cluster info
 output "aks_info" {

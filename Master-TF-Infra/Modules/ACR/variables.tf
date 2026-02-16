@@ -14,3 +14,7 @@ variable "adminenabled" {
   type = bool
   description = "Enable admin user for ACR (true/false)"
 }
+variable "default_tags" {
+  type = map(string)
+  description = "Default tags to apply to all resources"
+}

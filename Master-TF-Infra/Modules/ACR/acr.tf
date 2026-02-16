@@ -8,4 +8,5 @@ resource "azurerm_container_registry" "acr" {
   location            = data.azurerm_resource_group.rg.location
   sku                 = var.acrsku
   admin_enabled       = var.adminenabled
+  tags                = var.default_tags
 }
