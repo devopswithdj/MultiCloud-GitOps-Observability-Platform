@@ -25,7 +25,7 @@ resource "azurerm_role_assignment" "aks_rbac" {
   principal_id         = data.azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }
 resource "azurerm_role_assignment" "aks_acrpull" {
-  principal_id                     = data.azurerm_kubernetes_cluster.aks.identity[0].principal_id
+  principal_id                     = data.azurerm_kubernetes_cluster.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = data.azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
