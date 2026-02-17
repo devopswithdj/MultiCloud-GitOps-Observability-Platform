@@ -50,6 +50,14 @@ module "AKS" {
   default_tags          = var.default_tags
 }
 
+module "RoleAssignments" {
+  source      = "..//Modules/RoleAssignments"
+  depends_on = [ module.AKS, module.Network ]
+  rgname   = "${var.ProjectName}-${var.Loc}-${var.Environment}-rg"
+  vnetname = "${var.ProjectName}-${var.Loc}-${var.Environment}-vnet"
+  snetname = "${var.ProjectName}-${var.Loc}-${var.Environment}-snet"
+  aksname  = "${var.ProjectName}-${var.Loc}-${var.Environment}-aks"
+}
 
 # Output the AKS cluster info
 output "aks_info" {
